@@ -48,11 +48,23 @@ public class Account {
         this.playerName = playerName;
     }
     public static Account logIn(Scanner sc, List<Account> accountList) {
-        System.out.print("\nEnter username: ");
-        String username = sc.nextLine();
-        System.out.print("Enter password: ");
-        String password = sc.nextLine();
+        String username = enterUsername(sc);
+        String password = enterPassword(sc);
+        return successfulLogin(accountList, username, password);
 
+    }
+    public static void createAccount(Scanner sc) {
+
+    }
+    private static String enterUsername(Scanner sc){
+        System.out.print("\nEnter username: ");
+        return sc.nextLine();
+    }
+    private static String enterPassword(Scanner sc){
+        System.out.print("Enter password: ");
+        return sc.nextLine();
+    }
+    private static Account successfulLogin(List<Account> accountList, String username, String password){
         boolean succesfulLogin = false;
 
         for(Account a : accountList){
@@ -64,9 +76,6 @@ public class Account {
         }
         System.out.println("\nWrong username or password.");
         return null;
-    }
-    public void createAccount() {
-
     }
 
 }

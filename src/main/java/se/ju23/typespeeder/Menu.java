@@ -17,11 +17,12 @@ public class Menu implements MenuService {
         menu.add("2. Leaderboard.");
         menu.add("3. Manage Account.");
         menu.add("4. Settings.");
-        menu.add("0. Quit.");
+        menu.add("0. Logout.");
         return menu;
     }
-    public void displayLogInMenu(){
+    public void displayStartMenu(){
         System.out.println("""
+                
                 1. Login.
                 2. Create Account.
                 0. Exit."""
