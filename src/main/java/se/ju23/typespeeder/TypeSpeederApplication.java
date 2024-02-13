@@ -27,6 +27,10 @@ public class TypeSpeederApplication implements CommandLineRunner {
 
     @Autowired
     AccountRepo accountRepo;
+    @Autowired
+    AccountStatisticsRepo accountStatsRepo;
+
+
     @Override
     public void run(String... args) throws Exception {
         startMenu();
@@ -138,5 +142,5 @@ public class TypeSpeederApplication implements CommandLineRunner {
         System.out.println("Your Raw WPM: " + (int) raw);
         System.out.println("Your WPM: " + (int) wpm);
         System.out.println("Errors: " + charErrors);
-    }
+    } //TODO add so highest WPM updates in database
 }
