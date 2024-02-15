@@ -29,6 +29,8 @@ public class TypeSpeederApplication implements CommandLineRunner {
     AccountRepo accountRepo;
     @Autowired
     AccountStatisticsRepo accountStatsRepo;
+    @Autowired
+    AccountLeaderboardRepo accountLeaderboardRepo;
 
 
     @Override
@@ -67,9 +69,9 @@ public class TypeSpeederApplication implements CommandLineRunner {
 
             switch (menuChoice) {
                 case 1 -> typingTest();
-                case 2 -> {}
-                case 3 ->{}
-                case 4 ->{}
+                case 2 -> AccountLeaderboard.printLeaderboard(accountLeaderboardRepo);
+                case 3 ->{} //TODO Manage account
+                case 4 ->{} //TODO Settings, menu settings? language option?
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-4");
             }
@@ -84,9 +86,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
         sc.nextLine();
 
         long startTime = System.currentTimeMillis();
-
         String typedText = sc.nextLine();
-
         long endTime = System.currentTimeMillis();
 
         int wordErrors = 0;
@@ -139,8 +139,19 @@ public class TypeSpeederApplication implements CommandLineRunner {
         double wpm = (typedWords.length - wordErrors) / timeTakenMinutes;
 
 
+
         System.out.println("Your Raw WPM: " + (int) raw);
         System.out.println("Your WPM: " + (int) wpm);
         System.out.println("Errors: " + charErrors);
-    } //TODO add so highest WPM updates in database
+
+        updateHighestWpm(wpm);
+
+    } //TODO optimize this method more //TODO add more quotes //TODO add different difficulty levels
+    public void updateHighestWpm(double wpm){
+        AccountStatistics accountStats = accountStatsRepo.findById(currentUser.getId());
+        if(accountStats.getHighestWpm() < wpm){
+            accountStats.setHighestWpm(wpm);
+            accountStatsRepo.save(accountStats);
+        }
+    }
 }
