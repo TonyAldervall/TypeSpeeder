@@ -44,21 +44,19 @@ public class TypeSpeederApplication implements CommandLineRunner {
             int menuChoice = validator.validateInt();
 
             switch (menuChoice) {
-                case 1 -> {
-                    List<Account> accountList = accountRepo.findAll();
-                    currentUser = Account.logIn(sc, accountList);
-                    if (currentUser == null) {
-                        break;
-                    }
-                    else {
-                        menu();
-                    }
-                }
-                case 2 -> Account.createAccount(sc);
+                case 1 -> logIn();
+                case 2 -> Account.createAccount(sc, accountRepo);
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-2");
             }
         }while(loop);
+    }
+    public void logIn(){
+        List<Account> accountList = accountRepo.findAll();
+        currentUser = Account.logIn(sc, accountList);
+        if (currentUser != null) {
+            menu();
+        }
     }
     public void menu(){
         System.out.println("Welcome " + currentUser.getPlayerName() + "!");

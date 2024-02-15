@@ -58,21 +58,66 @@ public class Account {
 
     public static Account logIn(Scanner sc, List<Account> accountList) {
         String username = enterUsername(sc);
+        if (username.equals("0")){
+            return null;
+        }
         String password = enterPassword(sc);
         return successfulLogin(accountList, username, password);
     }
 
-    public static void createAccount(Scanner sc) {
+    public static void createAccount(Scanner sc, AccountRepo accountRepo) {
+        List<Account> accountList = accountRepo.findAll();
 
+        String username;
+        String password;
+        String playerName;
+
+        boolean loop = true;
+        do {
+            username = enterUsername(sc);
+            if (username.equals("0")){
+                return;
+            }
+            boolean usernameTaken = false;
+            for (Account a : accountList) {
+                if (a.getUsername().equalsIgnoreCase(username)) {
+                    usernameTaken = true;
+                    System.out.println("\nUsername already taken!");
+                    break;
+                }
+            }
+            if(!usernameTaken){
+                loop = false;
+            }
+        }while(loop);
+
+        loop = true;
+        do {
+            password = enterPassword(sc);
+            System.out.print("Repeat password: ");
+            String repeatPassword = sc.nextLine();
+
+            if (!password.equals(repeatPassword)) {
+                System.out.println("Password does not match.");
+            }
+            else{
+                loop = false;
+            }
+        }while(loop);
+        System.out.print("Enter a Player Name: ");
+        playerName = sc.nextLine();
+
+        Account a = new Account(username, password, playerName);
+        accountRepo.save(a);
     }
 
     private static String enterUsername(Scanner sc){
-        System.out.print("\nEnter username: ");
+        System.out.print("\nEnter Username (\"0\" to cancel): ");
         return sc.nextLine();
     }
 
     private static String enterPassword(Scanner sc){
-        System.out.print("Enter password: ");
+        System.out.print("Enter Password: ");
         return sc.nextLine();
     }
 

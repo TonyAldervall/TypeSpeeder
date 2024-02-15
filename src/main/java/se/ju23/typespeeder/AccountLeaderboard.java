@@ -9,6 +9,7 @@ import java.util.List;
 @Entity
 public class AccountLeaderboard {
     @Id
+    int id;
     private String playerName;
     private int highestWpm;
     public AccountLeaderboard() {
@@ -24,6 +25,6 @@ public class AccountLeaderboard {
 
     @Override
     public String toString() {
-        return playerName + ": " +highestWpm + " WPM";
+        return playerName + "#" + id + ": " +highestWpm + " WPM";
     }
 }
