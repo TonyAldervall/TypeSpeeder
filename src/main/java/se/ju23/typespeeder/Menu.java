@@ -29,4 +29,14 @@ public class Menu implements MenuService {
         );
         System.out.print("\nYour choice: ");
     }
+    public void displayManageAccountMenu(){
+        System.out.println("""
+                
+                1. Change username.
+                2. Change password.
+                3. Change player name.
+                0. Exit."""
+        );
+        System.out.print("\nYour choice: ");
+    }
 }

@@ -68,7 +68,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
             switch (menuChoice) {
                 case 1 -> typingTest();
                 case 2 -> AccountLeaderboard.printLeaderboard(accountLeaderboardRepo);
-                case 3 ->{} //TODO Manage account
+                case 3 -> manageAccount();
                 case 4 ->{} //TODO Settings, menu settings? language option?
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-4");
@@ -151,5 +151,21 @@ public class TypeSpeederApplication implements CommandLineRunner {
             accountStats.setHighestWpm(wpm);
             accountStatsRepo.save(accountStats);
         }
+    }
+    public void manageAccount(){
+        boolean loop = true;
+        do {
+            menu.displayManageAccountMenu();
+            int menuChoice = validator.validateInt();
+
+            switch(menuChoice){
+                case 1 -> Account.manageUsername(sc, accountRepo, currentUser);
+                case 2 -> Account.managePassword(sc, accountRepo, currentUser);
+                case 3 -> Account.managePlayerName(sc, accountRepo, currentUser);
+                case 0 -> loop = false;
+                default -> System.out.println("\nPlease enter a number between 0-3");
+            }
+
+        }while (loop);
     }
 }

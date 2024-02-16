@@ -57,26 +57,38 @@ public class Account {
     }
 
     public static Account logIn(Scanner sc, List<Account> accountList) {
-        String username = enterUsername(sc);
+        System.out.print("\nEnter username (\"0\" to cancel): ");
+        String username = sc.nextLine();
         if (username.equals("0")){
             return null;
         }
-        String password = enterPassword(sc);
+
+        System.out.print("Enter password: ");
+        String password = sc.nextLine();
         return successfulLogin(accountList, username, password);
     }
 
     public static void createAccount(Scanner sc, AccountRepo accountRepo) {
-        List<Account> accountList = accountRepo.findAll();
+        String username = inputUsername(sc, accountRepo);
+        if(username.equals("0")){
+            return;
+        }
+        String password = inputPassword(sc);
+        String playerName = inputPlayerName(sc);
 
+        Account a = new Account(username, password, playerName);
+        accountRepo.save(a);
+    }
+    private static String inputUsername(Scanner sc, AccountRepo accountRepo){
+        List<Account> accountList = accountRepo.findAll();
         String username;
-        String password;
-        String playerName;
 
         boolean loop = true;
         do {
-            username = enterUsername(sc);
+            System.out.print("Enter username (\"0\" to cancel):");
+            username = sc.nextLine();
             if (username.equals("0")){
-                return;
+                return username;
             }
             boolean usernameTaken = false;
             for (Account a : accountList) {
@@ -91,9 +103,15 @@ public class Account {
             }
         }while(loop);
 
-        loop = true;
+        return username;
+    }
+    private static String inputPassword(Scanner sc){
+        String password;
+
+        boolean loop = true;
         do {
-            password = enterPassword(sc);
+            System.out.print("Enter password: ");
+            password = sc.nextLine();
             System.out.print("Repeat password: ");
             String repeatPassword = sc.nextLine();
 
@@ -104,21 +122,29 @@ public class Account {
                 loop = false;
             }
         }while(loop);
+        return password;
+    }
+    private static String inputPlayerName(Scanner sc){
         System.out.print("Enter a Player Name: ");
-        playerName = sc.nextLine();
-
-        Account a = new Account(username, password, playerName);
-        accountRepo.save(a);
-    }
-
-    private static String enterUsername(Scanner sc){
-        System.out.print("\nEnter Username (\"0\" to cancel): ");
         return sc.nextLine();
     }
-
-    private static String enterPassword(Scanner sc){
-        System.out.print("Enter Password: ");
-        return sc.nextLine();
+    public static void manageUsername(Scanner sc, AccountRepo accountRepo, Account currentUser){
+        String username = inputUsername(sc, accountRepo);
+        if(username.equals("0")){
+            return;
+        }
+        currentUser.setUsername(username);
+        accountRepo.save(currentUser);
+    }
+    public static void managePassword(Scanner sc, AccountRepo accountRepo, Account currentUser){
+        String password = inputPassword(sc);
+        currentUser.setPassword(password);
+        accountRepo.save(currentUser);
+    }
+    public static void managePlayerName(Scanner sc, AccountRepo accountRepo, Account currentUser){
+        String playerName = inputPlayerName(sc);
+        currentUser.setPlayerName(playerName);
+        accountRepo.save(currentUser);
     }
 
     private static Account successfulLogin(List<Account> accountList, String username, String password){
