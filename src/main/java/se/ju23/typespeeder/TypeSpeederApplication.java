@@ -19,6 +19,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public static Validator validator = new Validator();
     public static Scanner sc = new Scanner(System.in);
     public static Account currentUser;
+    public static  Challenge challenge;
     public static String ANSI_GREEN = "\033[32m";
     public static String ANSI_RED = "\033[31m";
     public static String ANSI_CYAN = "\033[36m";
