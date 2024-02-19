@@ -19,7 +19,6 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public static Validator validator = new Validator();
     public static Scanner sc = new Scanner(System.in);
     public static Account currentUser;
-    public static  Challenge challenge;
     public static String ANSI_GREEN = "\033[32m";
     public static String ANSI_RED = "\033[31m";
     public static String ANSI_CYAN = "\033[36m";
@@ -32,6 +31,14 @@ public class TypeSpeederApplication implements CommandLineRunner {
     AccountStatisticsRepo accountStatsRepo;
     @Autowired
     AccountLeaderboardRepo accountLeaderboardRepo;
+    @Autowired
+    QuotesEnglishRepo quotesEnglishRepo;
+    @Autowired
+    WordsEnglishRepo wordsEnglishRepo;
+    @Autowired
+    QuotesSwedishRepo quotesSwedishRepo;
+    @Autowired
+    WordsSwedishRepo wordsSwedishRepo;
 
 
     @Override
@@ -67,7 +74,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
             int menuChoice = validator.validateInt();
 
             switch (menuChoice) {
-                case 1 -> typingTest();
+                case 1 -> challenge();
                 case 2 -> AccountLeaderboard.printLeaderboard(accountLeaderboardRepo);
                 case 3 -> manageAccount();
                 case 4 ->{} //TODO Settings, menu settings? language option?
@@ -77,6 +84,36 @@ public class TypeSpeederApplication implements CommandLineRunner {
 
         }while(loop);
     }
+    public void challenge(){
+        boolean loop = true;
+        do{
+            menu.displayChallengeMenu();
+            int menuChoice = validator.validateInt();
+
+            switch(menuChoice){
+                case 1 -> quotesEnglish();
+                case 2 -> wordsEnglish25();
+                case 3 -> quotesSwedish();
+                case 4 -> wordsSwedish25();
+                case 0 -> loop = false;
+                default -> System.out.println("\nPlease enter a number between 0-4");
+            }
+        }while (loop);
+    }
+    public void quotesEnglish(){
+        List<QuotesEnglish> quotes = quotesEnglishRepo.findAll();
+
+    }
+    public void wordsEnglish25(){
+
+    }
+    public void quotesSwedish(){
+
+    }
+    public void wordsSwedish25(){
+
+    }
+
     public void typingTest(){
         System.out.println("Type the following quote as fast as you can:");
         String quote = "The quick brown fox jumps over the lazy dog.";

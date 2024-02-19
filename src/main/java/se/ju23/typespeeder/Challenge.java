@@ -1,10 +1,18 @@
 package se.ju23.typespeeder;
 
+import java.util.List;
+
 public class Challenge {
-    public static void startChallenge(){
+    public void startChallenge(){
 
     }
-    public static void lettersToType(){
+    public void lettersToType(){
+
+    }
+    public Words wordsToType(List<Words> wordsList){
+
+    }
+    public String quoteToType(List<Quotes> quotes){
 
     }
 }

@@ -91,6 +91,29 @@ public class Menu implements MenuService {
             System.out.print("\nDitt val: ");
         }
     }
+    public void displayChallengeMenu() {
+        if (language.equalsIgnoreCase("engelska")) {
+            System.out.println("""
+                                    
+                    1. English quotes.
+                    2. English words 25.
+                    3. Swedish quotes.
+                    4. Swedish words 25.
+                    0. Exit."""
+            );
+            System.out.print("\nYour choice: ");
+        } else {
+            System.out.println("""
+                                    
+                    1. Engelska citat.
+                    2. Engelska ord 25.
+                    3. Svenska citat.
+                    4. Svenska ord 25.
+                    0. Avsluta."""
+            );
+            System.out.print("\nDitt val: ");
+        }
+    }
 
     public void setLanguage(String language) {
         if(language.equalsIgnoreCase("engelska") || language.equalsIgnoreCase("svenska")){
