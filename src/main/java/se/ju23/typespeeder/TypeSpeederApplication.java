@@ -101,8 +101,8 @@ public class TypeSpeederApplication implements CommandLineRunner {
         }while (loop);
     }
     public void quotesEnglish(){
-        List<QuotesEnglish> quotes = quotesEnglishRepo.findAll();
-
+        List<Quotes> quotes = quotesEnglishRepo.findAllByIdNotNull();
+        String quote = Challenge.quoteToType(quotes);
     }
     public void wordsEnglish25(){
 

@@ -9,10 +9,15 @@ public class Challenge {
     public void lettersToType(){
 
     }
-    public Words wordsToType(List<Words> wordsList){
-
+    public static StringBuilder wordsToType(List<Words> wordsList){
+        StringBuilder words = new StringBuilder();
+        for (int i = 0; i < 25; i++) {
+            words.append(wordsList.get((int) Math.random() * wordsList.size()));
+            words.append(" ");
+        }
+        return words;
     }
-    public String quoteToType(List<Quotes> quotes){
-
+    public static String quoteToType(List<Quotes> quotes){
+        return quotes.get((int)Math.random() * quotes.size()).getQuote();
     }
 }
