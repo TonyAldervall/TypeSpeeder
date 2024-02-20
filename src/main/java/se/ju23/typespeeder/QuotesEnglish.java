@@ -17,6 +17,6 @@ public class QuotesEnglish implements Quotes{
 
     @Override
     public String getQuote() {
-        return null;
+        return quote;
     }
 }

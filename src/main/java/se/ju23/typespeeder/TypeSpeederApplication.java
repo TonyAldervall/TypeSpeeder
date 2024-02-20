@@ -84,7 +84,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
 
         }while(loop);
     }
-    public void challenge(){
+    public void challenge(){ //TODO add more challenges.
         boolean loop = true;
         do{
             menu.displayChallengeMenu();

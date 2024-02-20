@@ -16,6 +16,6 @@ public class QuotesSwedish implements Quotes{
 
     @Override
     public String getQuote() {
-        return null;
+        return quote;
     }
 }
