@@ -103,87 +103,28 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public void quotesEnglish(){
         List<Quotes> quotes = quotesEnglishRepo.findAllByIdNotNull();
         String quote = Challenge.quoteToType(quotes);
+        double wpm = Challenge.startChallenge(quote);
+        updateHighestWpm(wpm, accountStatsRepo);
     }
     public void wordsEnglish25(){
-
+        List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
+        String words = Challenge.wordsToType(wordsList);
+        double wpm = Challenge.startChallenge(words);
+        updateHighestWpm(wpm, accountStatsRepo);
     }
     public void quotesSwedish(){
-
+        List<Quotes> quotes = quotesSwedishRepo.findAllByIdNotNull();
+        String quote = Challenge.quoteToType(quotes);
+        double wpm = Challenge.startChallenge(quote);
+        updateHighestWpm(wpm, accountStatsRepo);
     }
     public void wordsSwedish25(){
-
+        List<Words> wordsList = wordsSwedishRepo.findAllByIdNotNull();
+        String words = Challenge.wordsToType(wordsList);
+        double wpm = Challenge.startChallenge(words);
+        updateHighestWpm(wpm, accountStatsRepo);
     }
-
-    public void typingTest(){
-        System.out.println("Type the following quote as fast as you can:");
-        String quote = "The quick brown fox jumps over the lazy dog.";
-        System.out.println(ANSI_CYAN + "\"" + quote + "\"" + ANSI_RESET);
-        System.out.println("Press enter to start the timer");
-        sc.nextLine();
-
-        long startTime = System.currentTimeMillis();
-        String typedText = sc.nextLine();
-        long endTime = System.currentTimeMillis();
-
-        int wordErrors = 0;
-        int charErrors = 0;
-
-        StringBuilder outputBuilder = new StringBuilder();
-        String[] quoteWords = quote.split("\\s+");
-        String[] typedWords = typedText.split("\\s+");
-
-        for (int i = 0; i < Math.min(typedWords.length, quoteWords.length); i++) {
-            if (!typedWords[i].equals(quoteWords[i])) {
-                wordErrors++;
-                for (int j = 0; j < Math.min(typedWords[i].length(), quoteWords[i].length()); j++) {
-                    char typedChar = typedWords[i].charAt(j);
-                    char expectedChar = quoteWords[i].charAt(j);
-                    if (typedChar == expectedChar) {
-                        outputBuilder.append(ANSI_GREEN);
-                        outputBuilder.append(typedChar);
-                    }
-                    else {
-                        charErrors++;
-                        outputBuilder.append(ANSI_RED);
-                        outputBuilder.append(typedChar);
-                    }
-                }
-                if(typedWords[i].length() > quoteWords[i].length()){
-                    for (int j = quoteWords[i].length(); j < typedWords[i].length(); j++) {
-                        char typedChar = typedWords[i].charAt(j);
-                        charErrors++;
-                        outputBuilder.append(ANSI_RED);
-                        outputBuilder.append(typedChar);
-                    }
-                }
-                outputBuilder.append(" ");
-            }
-            else{
-                outputBuilder.append(ANSI_GREEN);
-                outputBuilder.append(typedWords[i]);
-                outputBuilder.append(" ");
-            }
-        }
-
-        System.out.println(outputBuilder);
-        System.out.print(ANSI_RESET);
-
-
-
-        double timeTakenMinutes = ((endTime - startTime) / 1000.0) / 60;
-        double raw = typedWords.length / timeTakenMinutes;
-        double wpm = (typedWords.length - wordErrors) / timeTakenMinutes;
-
-
-
-        System.out.println("Your Raw WPM: " + (int) raw);
-        System.out.println("Your WPM: " + (int) wpm);
-        System.out.println("Errors: " + charErrors);
-
-        updateHighestWpm(wpm);
-
-    } //TODO optimize this method more //TODO add more quotes //TODO add different difficulty levels
-    public void updateHighestWpm(double wpm){
+    public void updateHighestWpm(double wpm, AccountStatisticsRepo accountStatsRepo){
         AccountStatistics accountStats = accountStatsRepo.findById(currentUser.getId());
         if(accountStats.getHighestWpm() < wpm){
             accountStats.setHighestWpm(wpm);
