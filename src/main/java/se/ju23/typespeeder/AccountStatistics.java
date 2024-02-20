@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class AccountStatistics {
     @Id
     private int id;
-    private int highestWpm;
+    private double highestWpm;
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
@@ -24,11 +24,11 @@ public class AccountStatistics {
         return id;
     }
 
-    public int getHighestWpm() {
+    public double getHighestWpm() {
         return highestWpm;
     }
 
-    public void setHighestWpm(int highestWpm) {
+    public void setHighestWpm(double highestWpm) {
         this.highestWpm = highestWpm;
     }
 }

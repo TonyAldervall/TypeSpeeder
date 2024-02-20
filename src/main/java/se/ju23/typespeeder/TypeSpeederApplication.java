@@ -29,6 +29,16 @@ public class TypeSpeederApplication implements CommandLineRunner {
     AccountRepo accountRepo;
     @Autowired
     AccountStatisticsRepo accountStatsRepo;
+    @Autowired
+    AccountLeaderboardRepo accountLeaderboardRepo;
+    @Autowired
+    QuotesEnglishRepo quotesEnglishRepo;
+    @Autowired
+    WordsEnglishRepo wordsEnglishRepo;
+    @Autowired
+    QuotesSwedishRepo quotesSwedishRepo;
+    @Autowired
+    WordsSwedishRepo wordsSwedishRepo;
 
 
     @Override
@@ -42,21 +52,19 @@ public class TypeSpeederApplication implements CommandLineRunner {
             int menuChoice = validator.validateInt();
 
             switch (menuChoice) {
-                case 1 -> {
-                    List<Account> accountList = accountRepo.findAll();
-                    currentUser = Account.logIn(sc, accountList);
-                    if (currentUser == null) {
-                        break;
-                    }
-                    else {
-                        menu();
-                    }
-                }
-                case 2 -> Account.createAccount(sc);
+                case 1 -> logIn();
+                case 2 -> Account.createAccount(sc, accountRepo);
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-2");
             }
         }while(loop);
+    }
+    public void logIn(){
+        List<Account> accountList = accountRepo.findAll();
+        currentUser = Account.logIn(sc, accountList);
+        if (currentUser != null) {
+            menu();
+        }
     }
     public void menu(){
         System.out.println("Welcome " + currentUser.getPlayerName() + "!");
@@ -66,81 +74,77 @@ public class TypeSpeederApplication implements CommandLineRunner {
             int menuChoice = validator.validateInt();
 
             switch (menuChoice) {
-                case 1 -> typingTest();
-                case 2 -> {}
-                case 3 ->{}
-                case 4 ->{}
+                case 1 -> challenge();
+                case 2 -> AccountLeaderboard.printLeaderboard(accountLeaderboardRepo);
+                case 3 -> manageAccount();
+                case 4 ->{} //TODO Settings, menu settings? language option?
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-4");
             }
 
         }while(loop);
     }
-    public void typingTest(){
-        System.out.println("Type the following quote as fast as you can:");
-        String quote = "The quick brown fox jumps over the lazy dog.";
-        System.out.println(ANSI_CYAN + "\"" + quote + "\"" + ANSI_RESET);
-        System.out.println("Press enter to start the timer");
-        sc.nextLine();
+    public void challenge(){ //TODO add more challenges.
+        boolean loop = true;
+        do{
+            menu.displayChallengeMenu();
+            int menuChoice = validator.validateInt();
 
-        long startTime = System.currentTimeMillis();
-
-        String typedText = sc.nextLine();
-
-        long endTime = System.currentTimeMillis();
-
-        int wordErrors = 0;
-        int charErrors = 0;
-
-        StringBuilder outputBuilder = new StringBuilder();
-        String[] quoteWords = quote.split("\\s+");
-        String[] typedWords = typedText.split("\\s+");
-
-        for (int i = 0; i < Math.min(typedWords.length, quoteWords.length); i++) {
-            if (!typedWords[i].equals(quoteWords[i])) {
-                wordErrors++;
-                for (int j = 0; j < Math.min(typedWords[i].length(), quoteWords[i].length()); j++) {
-                    char typedChar = typedWords[i].charAt(j);
-                    char expectedChar = quoteWords[i].charAt(j);
-                    if (typedChar == expectedChar) {
-                        outputBuilder.append(ANSI_GREEN);
-                        outputBuilder.append(typedChar);
-                    }
-                    else {
-                        charErrors++;
-                        outputBuilder.append(ANSI_RED);
-                        outputBuilder.append(typedChar);
-                    }
-                }
-                if(typedWords[i].length() > quoteWords[i].length()){
-                    for (int j = quoteWords[i].length(); j < typedWords[i].length(); j++) {
-                        char typedChar = typedWords[i].charAt(j);
-                        charErrors++;
-                        outputBuilder.append(ANSI_RED);
-                        outputBuilder.append(typedChar);
-                    }
-                }
-                outputBuilder.append(" ");
+            switch(menuChoice){
+                case 1 -> quotesEnglish();
+                case 2 -> wordsEnglish25();
+                case 3 -> quotesSwedish();
+                case 4 -> wordsSwedish25();
+                case 0 -> loop = false;
+                default -> System.out.println("\nPlease enter a number between 0-4");
             }
-            else{
-                outputBuilder.append(ANSI_GREEN);
-                outputBuilder.append(typedWords[i]);
-                outputBuilder.append(" ");
-            }
+        }while (loop);
+    }
+    public void quotesEnglish(){
+        List<Quotes> quotes = quotesEnglishRepo.findAllByIdNotNull();
+        String quote = Challenge.quoteToType(quotes);
+        double wpm = Challenge.startChallenge(quote);
+        updateHighestWpm(wpm, accountStatsRepo);
+    }
+    public void wordsEnglish25(){
+        List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
+        String words = Challenge.wordsToType(wordsList);
+        double wpm = Challenge.startChallenge(words);
+        updateHighestWpm(wpm, accountStatsRepo);
+    }
+    public void quotesSwedish(){
+        List<Quotes> quotes = quotesSwedishRepo.findAllByIdNotNull();
+        String quote = Challenge.quoteToType(quotes);
+        double wpm = Challenge.startChallenge(quote);
+        updateHighestWpm(wpm, accountStatsRepo);
+    }
+    public void wordsSwedish25(){
+        List<Words> wordsList = wordsSwedishRepo.findAllByIdNotNull();
+        String words = Challenge.wordsToType(wordsList);
+        double wpm = Challenge.startChallenge(words);
+        updateHighestWpm(wpm, accountStatsRepo);
+    }
+    public void updateHighestWpm(double wpm, AccountStatisticsRepo accountStatsRepo){
+        AccountStatistics accountStats = accountStatsRepo.findById(currentUser.getId());
+        if(accountStats.getHighestWpm() < wpm){
+            accountStats.setHighestWpm(wpm);
+            accountStatsRepo.save(accountStats);
         }
+    }
+    public void manageAccount(){
+        boolean loop = true;
+        do {
+            menu.displayManageAccountMenu();
+            int menuChoice = validator.validateInt();
 
-        System.out.println(outputBuilder);
-        System.out.print(ANSI_RESET);
+            switch(menuChoice){
+                case 1 -> Account.manageUsername(sc, accountRepo, currentUser);
+                case 2 -> Account.managePassword(sc, accountRepo, currentUser);
+                case 3 -> Account.managePlayerName(sc, accountRepo, currentUser);
+                case 0 -> loop = false;
+                default -> System.out.println("\nPlease enter a number between 0-3");
+            }
 
-
-
-        double timeTakenMinutes = ((endTime - startTime) / 1000.0) / 60;
-        double raw = typedWords.length / timeTakenMinutes;
-        double wpm = (typedWords.length - wordErrors) / timeTakenMinutes;
-
-
-        System.out.println("Your Raw WPM: " + (int) raw);
-        System.out.println("Your WPM: " + (int) wpm);
-        System.out.println("Errors: " + charErrors);
-    } //TODO add so highest WPM updates in database
+        }while (loop);
+    }
 }
