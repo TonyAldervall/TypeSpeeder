@@ -11,7 +11,7 @@ public class Menu implements MenuService {
         sc = new Scanner (System.in);
         this.language = "engelska";
     }
-    public void displayMenu() {
+    public void displayMenu() { //TODO change tests so i can make menus better
         System.out.print("Välj språk (svenska/engelska):");
         String language = sc.nextLine();
         while(!language.equalsIgnoreCase("svenska") && !language.equalsIgnoreCase("engelska")){
@@ -89,6 +89,36 @@ public class Menu implements MenuService {
                     0. Avsluta."""
             );
             System.out.print("\nDitt val: ");
+        }
+    }
+    public void displayChallengeMenu() {
+        if (language.equalsIgnoreCase("engelska")) {
+            System.out.println("""
+                                    
+                    1. English quotes.
+                    2. English words 25.
+                    3. Swedish quotes.
+                    4. Swedish words 25.
+                    0. Exit."""
+            );
+            System.out.print("\nYour choice: ");
+        } else {
+            System.out.println("""
+                                    
+                    1. Engelska citat.
+                    2. Engelska ord 25.
+                    3. Svenska citat.
+                    4. Svenska ord 25.
+                    0. Avsluta."""
+            );
+            System.out.print("\nDitt val: ");
+        }
+    }
+    public void displayErrorMessage(){
+        if (language.equalsIgnoreCase("engelska")) {
+            System.out.println("You need to type something!");
+        } else {
+            System.out.println("Du måste skriva något!");
         }
     }
 
