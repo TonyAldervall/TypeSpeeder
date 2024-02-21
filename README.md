@@ -26,3 +26,5 @@ Profiling tests.
 ![image](https://github.com/TonyAldervall/TypeSpeeder/assets/145578750/cff58b6b-d157-4997-a8ae-e6148b2acf89)
 
 ![image](https://github.com/TonyAldervall/TypeSpeeder/assets/145578750/a08110af-e746-4bbe-8dbe-8312430c71e4)
+
+![image](https://github.com/TonyAldervall/TypeSpeeder/assets/145578750/573d75f9-5d5c-4281-aab5-c6e6f80afa2b)
