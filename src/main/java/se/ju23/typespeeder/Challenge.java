@@ -21,9 +21,10 @@ public class Challenge {
         String[] textWords = text.split("\\s+");
         String[] typedWords = typedText.split("\\s+");
 
-        int[] errors = challengeOutput(textWords, typedWords, text);
-        int wordErrors = errors[0];
-        int charErrors = errors[1];
+        int[] numericals = challengeOutput(textWords, typedWords, text);
+        int wordErrors = numericals[0];
+        int charErrors = numericals[1];
+        int correct = numericals[2];
 
         double timeTakenSeconds = (endTime - startTime) / 1000.0;
         double timeTakenMinutes = timeTakenSeconds / 60;
@@ -31,6 +32,7 @@ public class Challenge {
         double wpm = (typedWords.length - wordErrors) / timeTakenMinutes;
         int points = calculatePoints((int) wpm, (int)timeTakenSeconds, charErrors);
         currentUser.getLevel().addPoints(points);
+        currentUser.getAccountStatistics().addCorrect(correct);
 
         System.out.println("\nRaw WPM: " + (int) raw);
         System.out.println("WPM: " + (int) wpm);
@@ -43,8 +45,8 @@ public class Challenge {
         StringBuilder outputBuilder = new StringBuilder();
         int wordErrors = 0;
         int charErrors = 0;
+        int correct = 0;
         int maxWordsLength = Math.max(typedWords.length, textWords.length);
-        int minWordsLength = Math.min(typedWords.length, textWords.length);
 
         for (int i = 0; i < maxWordsLength; i++) { //Loops through the longest String.
             if(i < typedWords.length && i < textWords.length) { //If the index is in bounds for both strings.
@@ -56,10 +58,13 @@ public class Challenge {
                             char typedChar = typedWords[i].charAt(j);
                             char expectedChar = textWords[i].charAt(j);
                             if (typedChar == expectedChar) {
+                                correct++;
+                                currentUser.getAccountStatistics().addCorrectInARow();
                                 outputBuilder.append(ANSI_GREEN);
                                 outputBuilder.append(typedChar);
                             } else {
                                 charErrors++;
+                                currentUser.getAccountStatistics().resetCorrectInARow();
                                 outputBuilder.append(ANSI_RED);
                                 outputBuilder.append(typedChar);
                             }
@@ -67,11 +72,13 @@ public class Challenge {
                         else if (typedWords[i].length() > textWords[i].length()) { //Handle any excess characters in a word as errors.
                             char typedChar = typedWords[i].charAt(j);
                             charErrors++;
+                            currentUser.getAccountStatistics().resetCorrectInARow();
                             outputBuilder.append(ANSI_RED);
                             outputBuilder.append(typedChar);
 
                         } else if (typedWords[i].length() < textWords[i].length()) { //Handle any missing characters in a word as errors.
                             charErrors++;
+                            currentUser.getAccountStatistics().resetCorrectInARow();
                         }
                     }
                     outputBuilder.append(" ");
@@ -79,13 +86,19 @@ public class Challenge {
                     outputBuilder.append(ANSI_GREEN);
                     outputBuilder.append(typedWords[i]);
                     outputBuilder.append(" ");
+                    for (int j = 0; j < typedWords[i].length(); j++) { //Add for every correct character.
+                        correct++;
+                        currentUser.getAccountStatistics().addCorrectInARow();
+                    }
                 }
             } else if (i < typedWords.length) { // If typedWords is too long, handle the remaining words as errors.
                 wordErrors++;
+                currentUser.getAccountStatistics().resetCorrectInARow();
                 outputBuilder.append(ANSI_RED).append(typedWords[i]).append(" ");
             }
             else if (i < textWords.length) { // If typedWords is too short, handle the remaining words as errors.
                 wordErrors++;
+                currentUser.getAccountStatistics().resetCorrectInARow();
                 outputBuilder.append(ANSI_RED).append(textWords[i]).append(" ");
             }
         }
@@ -93,8 +106,8 @@ public class Challenge {
         System.out.println(outputBuilder);
         System.out.print(ANSI_RESET);
 
-        return new int[]{wordErrors, charErrors};
-    }
+        return new int[]{wordErrors, charErrors, correct};
+    } //TODO compare against the real text instead of the typedtext.
     public static int calculatePoints(int wpm, int timeTakenSeconds, int charErrors){
         int points = 35;
 

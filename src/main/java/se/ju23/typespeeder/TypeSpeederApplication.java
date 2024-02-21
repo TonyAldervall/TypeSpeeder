@@ -106,7 +106,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
         List<Quotes> quotes = quotesEnglishRepo.findAllByIdNotNull();
         String quote = Challenge.quoteToType(quotes);
         double wpm = Challenge.startChallenge(quote);
-        updateHighestWpm(wpm);
+        currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
     }
@@ -114,7 +114,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
         List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
         String words = Challenge.wordsToType(wordsList);
         double wpm = Challenge.startChallenge(words);
-        updateHighestWpm(wpm);
+        currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
     }
@@ -122,7 +122,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
         List<Quotes> quotes = quotesSwedishRepo.findAllByIdNotNull();
         String quote = Challenge.quoteToType(quotes);
         double wpm = Challenge.startChallenge(quote);
-        updateHighestWpm(wpm);
+        currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
     }
@@ -130,18 +130,13 @@ public class TypeSpeederApplication implements CommandLineRunner {
         List<Words> wordsList = wordsSwedishRepo.findAllByIdNotNull();
         String words = Challenge.wordsToType(wordsList);
         double wpm = Challenge.startChallenge(words);
-        updateHighestWpm(wpm);
+        currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
     }
     public void letters(){
         List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
 
-    }
-    public void updateHighestWpm(double wpm){
-        if(currentUser.getAccountStatistics().getHighestWpm() < wpm){
-            currentUser.getAccountStatistics().setHighestWpm(wpm);
-        }
     }
     public void manageAccount(){
         boolean loop = true;
