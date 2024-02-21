@@ -19,6 +19,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public static Validator validator = new Validator();
     public static Scanner sc = new Scanner(System.in);
     public static Account currentUser;
+    public static Level level;
     public static String ANSI_GREEN = "\033[32m";
     public static String ANSI_RED = "\033[31m";
     public static String ANSI_CYAN = "\033[36m";
@@ -95,6 +96,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
                 case 2 -> wordsEnglish25();
                 case 3 -> quotesSwedish();
                 case 4 -> wordsSwedish25();
+                case 5 -> letters();
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-4");
             }
@@ -104,31 +106,41 @@ public class TypeSpeederApplication implements CommandLineRunner {
         List<Quotes> quotes = quotesEnglishRepo.findAllByIdNotNull();
         String quote = Challenge.quoteToType(quotes);
         double wpm = Challenge.startChallenge(quote);
-        updateHighestWpm(wpm, accountStatsRepo);
+        updateHighestWpm(wpm);
+        currentUser.getLevel().tryLevelUp();
+        accountRepo.save(currentUser);
     }
     public void wordsEnglish25(){
         List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
         String words = Challenge.wordsToType(wordsList);
         double wpm = Challenge.startChallenge(words);
-        updateHighestWpm(wpm, accountStatsRepo);
+        updateHighestWpm(wpm);
+        currentUser.getLevel().tryLevelUp();
+        accountRepo.save(currentUser);
     }
     public void quotesSwedish(){
         List<Quotes> quotes = quotesSwedishRepo.findAllByIdNotNull();
         String quote = Challenge.quoteToType(quotes);
         double wpm = Challenge.startChallenge(quote);
-        updateHighestWpm(wpm, accountStatsRepo);
+        updateHighestWpm(wpm);
+        currentUser.getLevel().tryLevelUp();
+        accountRepo.save(currentUser);
     }
     public void wordsSwedish25(){
         List<Words> wordsList = wordsSwedishRepo.findAllByIdNotNull();
         String words = Challenge.wordsToType(wordsList);
         double wpm = Challenge.startChallenge(words);
-        updateHighestWpm(wpm, accountStatsRepo);
+        updateHighestWpm(wpm);
+        currentUser.getLevel().tryLevelUp();
+        accountRepo.save(currentUser);
     }
-    public void updateHighestWpm(double wpm, AccountStatisticsRepo accountStatsRepo){
-        AccountStatistics accountStats = accountStatsRepo.findById(currentUser.getId());
-        if(accountStats.getHighestWpm() < wpm){
-            accountStats.setHighestWpm(wpm);
-            accountStatsRepo.save(accountStats);
+    public void letters(){
+        List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
+
+    }
+    public void updateHighestWpm(double wpm){
+        if(currentUser.getAccountStatistics().getHighestWpm() < wpm){
+            currentUser.getAccountStatistics().setHighestWpm(wpm);
         }
     }
     public void manageAccount(){

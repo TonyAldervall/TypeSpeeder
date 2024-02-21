@@ -1,7 +1,6 @@
 package se.ju23.typespeeder;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static se.ju23.typespeeder.TypeSpeederApplication.*;
 
@@ -26,13 +25,17 @@ public class Challenge {
         int wordErrors = errors[0];
         int charErrors = errors[1];
 
-        double timeTakenMinutes = ((endTime - startTime) / 1000.0) / 60;
+        double timeTakenSeconds = (endTime - startTime) / 1000.0;
+        double timeTakenMinutes = timeTakenSeconds / 60;
         double raw = typedWords.length / timeTakenMinutes;
         double wpm = (typedWords.length - wordErrors) / timeTakenMinutes;
+        int points = calculatePoints((int) wpm, (int)timeTakenSeconds, charErrors);
+        currentUser.getLevel().addPoints(points);
 
-        System.out.println("\nYour Raw WPM: " + (int) raw);
-        System.out.println("Your WPM: " + (int) wpm);
+        System.out.println("\nRaw WPM: " + (int) raw);
+        System.out.println("WPM: " + (int) wpm);
         System.out.println("Errors: " + charErrors);
+        System.out.println("Points: " + points);
 
         return wpm;
     }
@@ -68,10 +71,7 @@ public class Challenge {
                             outputBuilder.append(typedChar);
 
                         } else if (typedWords[i].length() < textWords[i].length()) { //Handle any missing characters in a word as errors.
-                            //char missingChar = textWords[i].charAt(j);
                             charErrors++;
-                            //outputBuilder.append(ANSI_RED);
-                            //outputBuilder.append(missingChar);
                         }
                     }
                     outputBuilder.append(" ");
@@ -95,9 +95,28 @@ public class Challenge {
 
         return new int[]{wordErrors, charErrors};
     }
+    public static int calculatePoints(int wpm, int timeTakenSeconds, int charErrors){
+        int points = 35;
 
-    public void lettersToType(){
-        //TODO
+        int wpmBonus = Math.max(0, (wpm - 20) / 5);
+        points += wpmBonus;
+
+        int maxTimeTaken = 20;
+        int timeBonus = Math.min(timeTakenSeconds, maxTimeTaken);
+        points += timeBonus;
+
+        int errorPenalty = charErrors;
+        points -= errorPenalty * 2;
+
+        //points = Math.max(0, points);
+
+        return points;
+    }
+
+    public static void lettersToType(){
+        //Get 10 random words
+        //Get a random character from each word
+        //mark it red and add it to the final string that should be returned
     }
     public static String wordsToType(List<Words> wordsList){
         StringBuilder words = new StringBuilder();
