@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 public class HighestWpmLeaderboard {
     @Id
-    int id;
+    private int id;
     private int level;
     private String playerName;
     private int highestWpm;

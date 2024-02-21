@@ -33,6 +33,10 @@ public class TypeSpeederApplication implements CommandLineRunner {
     @Autowired
     HighestWpmLeaderboardRepo highestWpmLeaderboardRepo;
     @Autowired
+    MostCorrectLeaderboardRepo mostCorrectLeaderboardRepo;
+    @Autowired
+    MostCorrectInARowLeaderboardRepo mostCorrectInARowLeaderboardRepo;
+    @Autowired
     QuotesEnglishRepo quotesEnglishRepo;
     @Autowired
     WordsEnglishRepo wordsEnglishRepo;
@@ -76,7 +80,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
 
             switch (menuChoice) {
                 case 1 -> challenge();
-                case 2 -> HighestWpmLeaderboard.printLeaderboard(highestWpmLeaderboardRepo);
+                case 2 -> leaderboard();
                 case 3 -> manageAccount();
                 case 4 ->{} //TODO Settings, menu settings? language option?
                 case 0 -> loop = false;
@@ -84,6 +88,25 @@ public class TypeSpeederApplication implements CommandLineRunner {
             }
 
         }while(loop);
+    }
+    public void leaderboard(){
+        boolean loop = true;
+        do{
+            menu.displayLeaderboardMenu();
+            int menuChoice = validator.validateInt();
+
+            switch(menuChoice){
+                case 1 -> HighestWpmLeaderboard.printLeaderboard(highestWpmLeaderboardRepo);
+                case 2 -> MostCorrectLeaderboard.printLeaderboard(mostCorrectLeaderboardRepo);
+                case 3 -> MostCorrectInARowLeaderboard.printLeaderboard(mostCorrectInARowLeaderboardRepo);
+                case 4 -> combinedLeaderboard();
+                case 0 -> loop = false;
+                default -> System.out.println("\nPlease enter a number between 0-4");
+            }
+        }while (loop);
+    }
+    public void combinedLeaderboard(){
+        //TODO
     }
     public void challenge(){ //TODO add more challenges.
         boolean loop = true;
