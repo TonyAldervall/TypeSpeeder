@@ -97,7 +97,7 @@ public class Challenge {
     }
 
     public void lettersToType(){
-
+        //TODO
     }
     public static String wordsToType(List<Words> wordsList){
         StringBuilder words = new StringBuilder();
