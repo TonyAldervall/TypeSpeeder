@@ -35,14 +35,14 @@ public class Menu implements MenuService {
         List<String> menu = new ArrayList<>();
         if(language.equalsIgnoreCase("engelska")){
             menu.add("\n1. Play.");
-            menu.add("2. Leaderboard.");
+            menu.add("2. Leaderboards.");
             menu.add("3. Manage Account.");
             menu.add("4. Settings.");
             menu.add("0. Logout.");
         }
         else{
             menu.add("\n1. Spela.");
-            menu.add("2. Ranking Lista.");
+            menu.add("2. Ranking Listor.");
             menu.add("3. Hantera Konto.");
             menu.add("4. Inställningar.");
             menu.add("0. Logga ut.");
@@ -121,6 +121,29 @@ public class Menu implements MenuService {
             System.out.println("You need to type something!");
         } else {
             System.out.println("Du måste skriva något!");
+        }
+    }
+    public void displayLeaderboardMenu(){
+        if (language.equalsIgnoreCase("engelska")) {
+            System.out.println("""
+                                    
+                    1. Show Highest WPM Leaderboard.
+                    2. Show Most Correct Leaderboard.
+                    3. Show Most Correct In A Row Leaderboard.
+                    4. Show Combined Leaderboard.
+                    0. Exit."""
+            );
+            System.out.print("\nYour choice: ");
+        } else {
+            System.out.println("""
+                                    
+                    1. Visa Högst WPM Ranking Lista.
+                    2. Visa Mest Rätt Ranking Lista.
+                    3. Visa Mest Rätt I Rad Ranking Lista.
+                    4. Visa Kombinerad Ranking Lista.
+                    0. Avsluta."""
+            );
+            System.out.print("\nDitt val: ");
         }
     }
 

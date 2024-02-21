@@ -31,7 +31,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
     @Autowired
     AccountStatisticsRepo accountStatsRepo;
     @Autowired
-    AccountLeaderboardRepo accountLeaderboardRepo;
+    HighestWpmLeaderboardRepo highestWpmLeaderboardRepo;
     @Autowired
     QuotesEnglishRepo quotesEnglishRepo;
     @Autowired
@@ -76,7 +76,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
 
             switch (menuChoice) {
                 case 1 -> challenge();
-                case 2 -> AccountLeaderboard.printLeaderboard(accountLeaderboardRepo);
+                case 2 -> HighestWpmLeaderboard.printLeaderboard(highestWpmLeaderboardRepo);
                 case 3 -> manageAccount();
                 case 4 ->{} //TODO Settings, menu settings? language option?
                 case 0 -> loop = false;
