@@ -17,12 +17,16 @@ public class Account {
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id")
     private AccountStatistics accountStatistics;
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id")
+    private Level level;
 
     public Account(String username, String password, String playerName){
         this.username = username;
         this.password = password;
         this.playerName = playerName;
         this.accountStatistics = new AccountStatistics(this);
+        this.level = new Level(this);
     }
     public Account(){
 
@@ -54,6 +58,14 @@ public class Account {
 
     public void setPlayerName(String playerName) {
         this.playerName = playerName;
+    }
+
+    public AccountStatistics getAccountStatistics() {
+        return accountStatistics;
+    }
+
+    public Level getLevel() {
+        return level;
     }
 
     public static Account logIn(Scanner sc, List<Account> accountList) {

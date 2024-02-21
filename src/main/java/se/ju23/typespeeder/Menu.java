@@ -99,6 +99,7 @@ public class Menu implements MenuService {
                     2. English words 25.
                     3. Swedish quotes.
                     4. Swedish words 25.
+                    5. Letters.
                     0. Exit."""
             );
             System.out.print("\nYour choice: ");
@@ -109,6 +110,7 @@ public class Menu implements MenuService {
                     2. Engelska ord 25.
                     3. Svenska citat.
                     4. Svenska ord 25.
+                    5. Bokstäver.
                     0. Avsluta."""
             );
             System.out.print("\nDitt val: ");
