@@ -19,7 +19,6 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public static Validator validator = new Validator();
     public static Scanner sc = new Scanner(System.in);
     public static Account currentUser;
-    public static Level level;
     public static String ANSI_GREEN = "\033[32m";
     public static String ANSI_RED = "\033[31m";
     public static String ANSI_CYAN = "\033[36m";
@@ -44,7 +43,10 @@ public class TypeSpeederApplication implements CommandLineRunner {
     QuotesSwedishRepo quotesSwedishRepo;
     @Autowired
     WordsSwedishRepo wordsSwedishRepo;
-
+    @Autowired
+    PatchRepo patchRepo;
+    @Autowired
+    NewsLetterRepo newsLetterRepo;
 
     @Override
     public void run(String... args) throws Exception {
@@ -121,7 +123,6 @@ public class TypeSpeederApplication implements CommandLineRunner {
                 case 2 -> wordsEnglish25();
                 case 3 -> quotesSwedish();
                 case 4 -> wordsSwedish25();
-                case 5 -> letters();
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-4");
             }
@@ -159,10 +160,6 @@ public class TypeSpeederApplication implements CommandLineRunner {
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
     }
-    public void letters(){
-        List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
-        //TODO
-    }
     public void manageAccount(){
         boolean loop = true;
         do {
@@ -187,11 +184,12 @@ public class TypeSpeederApplication implements CommandLineRunner {
 
             switch(menuChoice){
                 case 1 -> menu.changeLanguage();
-                case 2 -> {}
-                case 3 -> {}
+                case 2 -> System.out.println(newsLetterRepo.findFirstByOrderByPublishDateTimeDesc());
+                case 3 -> System.out.println(patchRepo.findFirstByOrderByRealeaseDateTimeDesc());
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-3");
             }
         }while (loop);
     }
+
 }

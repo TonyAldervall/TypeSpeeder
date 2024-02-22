@@ -3,6 +3,8 @@ package se.ju23.typespeeder;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,7 +34,12 @@ public class ChallengePerformanceTest {
     public void testLettersToTypePerformance() {
         Challenge challenge = new Challenge();
         long startTime = System.nanoTime();
-        challenge.lettersToType();
+        List<Words> wordsList = new ArrayList<>();
+        WordsEnglish wordsEnglish = new WordsEnglish("Test");
+        for (int i = 0; i < 25; i++) {
+            wordsList.add(wordsEnglish);
+        }
+        challenge.wordsToType(wordsList);
         long endTime = System.nanoTime();
         long duration = (endTime - startTime) / MILLISECONDS_CONVERSION;
         assertTrue(duration <= MAX_EXECUTION_TIME, "Selecting letters to type took too long. Execution time: " + duration + " ms.");

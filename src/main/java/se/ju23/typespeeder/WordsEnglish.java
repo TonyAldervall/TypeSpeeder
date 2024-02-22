@@ -10,6 +10,9 @@ public class WordsEnglish implements Words{
     private int id;
     private String word;
 
+    public WordsEnglish(String word) {
+        this.word = word;
+    }
     public WordsEnglish() {
 
     }

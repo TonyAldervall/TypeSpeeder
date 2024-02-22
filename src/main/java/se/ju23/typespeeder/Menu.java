@@ -11,7 +11,7 @@ public class Menu implements MenuService {
         sc = new Scanner (System.in);
         this.language = "swedish";
     }
-    public void displayMenu() { //TODO change tests so i can make menus better
+    public void displayMenu() {
         List<String> menu = getMenuOptions();
         for(String s : menu){
             System.out.println(s);
@@ -86,7 +86,6 @@ public class Menu implements MenuService {
                     2. English words 25.
                     3. Swedish quotes.
                     4. Swedish words 25.
-                    5. Letters.
                     0. Exit."""
             );
             System.out.print("\nYour choice: ");
@@ -97,7 +96,6 @@ public class Menu implements MenuService {
                     2. Engelska ord 25.
                     3. Svenska citat.
                     4. Svenska ord 25.
-                    5. Bokstäver.
                     0. Avsluta."""
             );
             System.out.print("\nDitt val: ");

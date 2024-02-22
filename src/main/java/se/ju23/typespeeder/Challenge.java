@@ -36,7 +36,6 @@ public class Challenge {
         currentUser.getLevel().addPoints(points);
         currentUser.getAccountStatistics().addCorrect(correct);
 
-
         System.out.println("\nRaw WPM: " + (int) raw);
         System.out.println("WPM: " + (int) wpm);
         System.out.println("Errors: " + charErrors);
@@ -110,7 +109,7 @@ public class Challenge {
         System.out.print(ANSI_RESET);
 
         return new int[]{wordErrors, charErrors, correct};
-    } //TODO compare against the real text instead of the typedtext.
+    }
     public static int calculatePoints(int wpm, int timeTakenSeconds, int charErrors){
         int points = 35;
 
@@ -124,15 +123,7 @@ public class Challenge {
         int errorPenalty = charErrors;
         points -= errorPenalty * 2;
 
-        //points = Math.max(0, points);
-
         return points;
-    }
-
-    public static void lettersToType(){
-        //Get 10 random words
-        //Get a random character from each word
-        //mark it red and add it to the final string that should be returned
     }
     public static String wordsToType(List<Words> wordsList){
         StringBuilder words = new StringBuilder();
