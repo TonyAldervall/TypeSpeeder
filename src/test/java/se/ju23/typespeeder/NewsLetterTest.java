@@ -64,8 +64,11 @@ public class NewsLetterTest {
             LocalDateTime localDateTime = LocalDateTime.now();
             Object instance = someClass.getDeclaredConstructor(String.class, LocalDateTime.class).newInstance(content, localDateTime);
 
+
             //Expected Time Format
-            LocalDateTime dateTimeValue = (LocalDateTime) publishDateTime.get(instance);
+            Field field = someClass.getDeclaredField("publishDateTime");
+            field.setAccessible(true);
+            LocalDateTime dateTimeValue = (LocalDateTime) field.get(instance);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = dateTimeValue.format(formatter);
 

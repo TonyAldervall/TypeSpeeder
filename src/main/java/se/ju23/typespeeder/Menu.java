@@ -156,7 +156,7 @@ public class Menu implements MenuService {
     }
     public void changeLanguage(){
         if (language.equalsIgnoreCase("english")) {
-            System.out.print("\nChoose language (swedish/english");
+            System.out.print("\nChoose language (swedish/english):");
             String language = sc.nextLine();
             while (!language.equalsIgnoreCase("swedish") && !language.equalsIgnoreCase("english")) {
                 System.out.print("Please choose language (swedish/english):");
@@ -177,7 +177,7 @@ public class Menu implements MenuService {
                 language = sc.nextLine();
             }
             setLanguage(language);
-            if(language.equalsIgnoreCase("english")){
+            if(language.equalsIgnoreCase("engelska")){
                 System.out.println("English chosen.");
             }else {
                 System.out.println("Svenska valt.");

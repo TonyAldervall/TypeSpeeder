@@ -41,8 +41,11 @@ public class PatchTest {
             LocalDateTime localDateTime = LocalDateTime.now();
             Object instance = Class.forName("Patch").getDeclaredConstructor(String.class, LocalDateTime.class).newInstance(patch, localDateTime);
 
+
             //Expected Time Format
-            LocalDateTime dateTimeValue = (LocalDateTime) realeaseDateTime.get(instance);
+            Field field = someClass.getDeclaredField("realeaseDateTime");
+            field.setAccessible(true);
+            LocalDateTime dateTimeValue = (LocalDateTime) field.get(instance);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = dateTimeValue.format(formatter);
 

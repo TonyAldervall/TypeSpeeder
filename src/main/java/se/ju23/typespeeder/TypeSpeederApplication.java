@@ -82,7 +82,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
                 case 1 -> challenge();
                 case 2 -> leaderboard();
                 case 3 -> manageAccount();
-                case 4 ->{} //TODO Settings, language option? patch information? newsletter?
+                case 4 -> setting();
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-4");
             }

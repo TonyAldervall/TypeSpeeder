@@ -3,7 +3,7 @@ import java.time.format.DateTimeFormatter;
 
 public class NewsLetter {
     private String content;
-    public LocalDateTime publishDateTime;
+    private LocalDateTime publishDateTime;
 
     public NewsLetter(String content, LocalDateTime publishDateTime) {
         this.content = content;

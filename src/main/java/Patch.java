@@ -3,7 +3,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Patch {
     private String patchVersion;
-    public LocalDateTime realeaseDateTime;
+    private LocalDateTime realeaseDateTime;
 
     public Patch(String patchVersion, LocalDateTime realeaseDateTime) {
         realeaseDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
