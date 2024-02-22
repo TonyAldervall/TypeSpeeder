@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccountLeaderboardRepo extends JpaRepository<AccountLeaderboard, String> {
+public interface MostCorrectInARowLeaderboardRepo extends JpaRepository<MostCorrectInARowLeaderboard, Integer> {
 }

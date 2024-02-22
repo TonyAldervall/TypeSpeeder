@@ -19,7 +19,6 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public static Validator validator = new Validator();
     public static Scanner sc = new Scanner(System.in);
     public static Account currentUser;
-    public static Level level;
     public static String ANSI_GREEN = "\033[32m";
     public static String ANSI_RED = "\033[31m";
     public static String ANSI_CYAN = "\033[36m";
@@ -31,7 +30,11 @@ public class TypeSpeederApplication implements CommandLineRunner {
     @Autowired
     AccountStatisticsRepo accountStatsRepo;
     @Autowired
-    AccountLeaderboardRepo accountLeaderboardRepo;
+    HighestWpmLeaderboardRepo highestWpmLeaderboardRepo;
+    @Autowired
+    MostCorrectLeaderboardRepo mostCorrectLeaderboardRepo;
+    @Autowired
+    MostCorrectInARowLeaderboardRepo mostCorrectInARowLeaderboardRepo;
     @Autowired
     QuotesEnglishRepo quotesEnglishRepo;
     @Autowired
@@ -40,7 +43,10 @@ public class TypeSpeederApplication implements CommandLineRunner {
     QuotesSwedishRepo quotesSwedishRepo;
     @Autowired
     WordsSwedishRepo wordsSwedishRepo;
-
+    @Autowired
+    PatchRepo patchRepo;
+    @Autowired
+    NewsLetterRepo newsLetterRepo;
 
     @Override
     public void run(String... args) throws Exception {
@@ -76,16 +82,37 @@ public class TypeSpeederApplication implements CommandLineRunner {
 
             switch (menuChoice) {
                 case 1 -> challenge();
-                case 2 -> AccountLeaderboard.printLeaderboard(accountLeaderboardRepo);
+                case 2 -> leaderboard();
                 case 3 -> manageAccount();
-                case 4 ->{} //TODO Settings, menu settings? language option?
+                case 4 -> setting();
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-4");
             }
 
         }while(loop);
     }
-    public void challenge(){ //TODO add more challenges.
+    public void leaderboard(){
+        boolean loop = true;
+        do{
+            menu.displayLeaderboardMenu();
+            int menuChoice = validator.validateInt();
+
+            switch(menuChoice){
+                case 1 -> HighestWpmLeaderboard.printLeaderboard(highestWpmLeaderboardRepo);
+                case 2 -> MostCorrectLeaderboard.printLeaderboard(mostCorrectLeaderboardRepo);
+                case 3 -> MostCorrectInARowLeaderboard.printLeaderboard(mostCorrectInARowLeaderboardRepo);
+                case 4 -> combinedLeaderboard();
+                case 0 -> loop = false;
+                default -> System.out.println("\nPlease enter a number between 0-4");
+            }
+        }while (loop);
+    }
+    public void combinedLeaderboard(){
+        List<Account> accountList = accountRepo.findAll();
+        List<Account> sortedList = CombinedLeaderboard.sortLeaderboard(accountList);
+        CombinedLeaderboard.printLeaderboard(sortedList);
+    }
+    public void challenge(){
         boolean loop = true;
         do{
             menu.displayChallengeMenu();
@@ -96,7 +123,6 @@ public class TypeSpeederApplication implements CommandLineRunner {
                 case 2 -> wordsEnglish25();
                 case 3 -> quotesSwedish();
                 case 4 -> wordsSwedish25();
-                case 5 -> letters();
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-4");
             }
@@ -105,43 +131,34 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public void quotesEnglish(){
         List<Quotes> quotes = quotesEnglishRepo.findAllByIdNotNull();
         String quote = Challenge.quoteToType(quotes);
-        double wpm = Challenge.startChallenge(quote);
-        updateHighestWpm(wpm);
+        double wpm = Challenge.startChallenge(quote, sc, currentUser);
+        currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
     }
     public void wordsEnglish25(){
         List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
         String words = Challenge.wordsToType(wordsList);
-        double wpm = Challenge.startChallenge(words);
-        updateHighestWpm(wpm);
+        double wpm = Challenge.startChallenge(words, sc, currentUser);
+        currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
     }
     public void quotesSwedish(){
         List<Quotes> quotes = quotesSwedishRepo.findAllByIdNotNull();
         String quote = Challenge.quoteToType(quotes);
-        double wpm = Challenge.startChallenge(quote);
-        updateHighestWpm(wpm);
+        double wpm = Challenge.startChallenge(quote, sc, currentUser);
+        currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
     }
     public void wordsSwedish25(){
         List<Words> wordsList = wordsSwedishRepo.findAllByIdNotNull();
         String words = Challenge.wordsToType(wordsList);
-        double wpm = Challenge.startChallenge(words);
-        updateHighestWpm(wpm);
+        double wpm = Challenge.startChallenge(words, sc, currentUser);
+        currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
-    }
-    public void letters(){
-        List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
-
-    }
-    public void updateHighestWpm(double wpm){
-        if(currentUser.getAccountStatistics().getHighestWpm() < wpm){
-            currentUser.getAccountStatistics().setHighestWpm(wpm);
-        }
     }
     public void manageAccount(){
         boolean loop = true;
@@ -159,4 +176,20 @@ public class TypeSpeederApplication implements CommandLineRunner {
 
         }while (loop);
     }
+    public void setting(){
+        boolean loop = true;
+        do{
+            menu.displaySettingsMenu();
+            int menuChoice = validator.validateInt();
+
+            switch(menuChoice){
+                case 1 -> menu.changeLanguage();
+                case 2 -> System.out.println(newsLetterRepo.findFirstByOrderByPublishDateTimeDesc());
+                case 3 -> System.out.println(patchRepo.findFirstByOrderByRealeaseDateTimeDesc());
+                case 0 -> loop = false;
+                default -> System.out.println("\nPlease enter a number between 0-3");
+            }
+        }while (loop);
+    }
+
 }

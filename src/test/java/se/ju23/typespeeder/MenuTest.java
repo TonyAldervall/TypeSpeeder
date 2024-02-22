@@ -105,7 +105,7 @@ public class MenuTest {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
         Menu menu = new Menu();
-        menu.displayMenu();
+        menu.changeLanguage();
 
         String consoleOutput = outContent.toString();
         assertTrue(consoleOutput.contains("Välj språk (svenska/engelska):"), "Menu should prompt for language selection.");

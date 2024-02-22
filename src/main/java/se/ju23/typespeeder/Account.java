@@ -173,4 +173,11 @@ public class Account {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return "Level " + getLevel().getLevel() + " " + getPlayerName() + "#" + getId() + "\n"
+                + "WPM: " + (int)getAccountStatistics().getHighestWpm()
+                + "\nCorrect: " + getAccountStatistics().getCorrect()
+                + "\nMost Correct In A Row: " + getAccountStatistics().getMostCorrectInARow();
+    }
 }

@@ -39,7 +39,7 @@ public class MenuPerformanceTest {
         long startTime = System.nanoTime();
 
         Menu menu = new Menu();
-        menu.displayMenu();
+        menu.changeLanguage();
 
         long endTime = System.nanoTime();
         long duration = (endTime - startTime) / MILLISECONDS_CONVERSION;
