@@ -1,11 +1,12 @@
 package se.ju23.typespeeder;
 
 import java.util.List;
+import java.util.Scanner;
 
 import static se.ju23.typespeeder.TypeSpeederApplication.*;
 
 public class Challenge {
-    public static double startChallenge(String text){
+    public static double startChallenge(String text, Scanner sc, Account currentUser){
         System.out.println("Type the following text as fast as you can:");
         System.out.println(ANSI_CYAN + "\n\"" + text + "\"" + ANSI_RESET);
         System.out.println("Press enter to start the timer");
@@ -21,7 +22,7 @@ public class Challenge {
         String[] textWords = text.split("\\s+");
         String[] typedWords = typedText.split("\\s+");
 
-        int[] numericals = challengeOutput(textWords, typedWords, text);
+        int[] numericals = challengeOutput(textWords, typedWords, text, currentUser);
         int wordErrors = numericals[0];
         int charErrors = numericals[1];
         int correct = numericals[2];
@@ -31,8 +32,10 @@ public class Challenge {
         double raw = typedWords.length / timeTakenMinutes;
         double wpm = (typedWords.length - wordErrors) / timeTakenMinutes;
         int points = calculatePoints((int) wpm, (int)timeTakenSeconds, charErrors);
+
         currentUser.getLevel().addPoints(points);
         currentUser.getAccountStatistics().addCorrect(correct);
+
 
         System.out.println("\nRaw WPM: " + (int) raw);
         System.out.println("WPM: " + (int) wpm);
@@ -41,7 +44,7 @@ public class Challenge {
 
         return wpm;
     }
-    public static int[] challengeOutput(String[] textWords, String[] typedWords, String text){
+    public static int[] challengeOutput(String[] textWords, String[] typedWords, String text, Account currentUser){
         StringBuilder outputBuilder = new StringBuilder();
         int wordErrors = 0;
         int charErrors = 0;

@@ -82,7 +82,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
                 case 1 -> challenge();
                 case 2 -> leaderboard();
                 case 3 -> manageAccount();
-                case 4 ->{} //TODO Settings, menu settings? language option?
+                case 4 ->{} //TODO Settings, language option? patch information? newsletter?
                 case 0 -> loop = false;
                 default -> System.out.println("\nPlease enter a number between 0-4");
             }
@@ -110,7 +110,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
         List<Account> sortedList = CombinedLeaderboard.sortLeaderboard(accountList);
         CombinedLeaderboard.printLeaderboard(sortedList);
     }
-    public void challenge(){ //TODO add more challenges.
+    public void challenge(){
         boolean loop = true;
         do{
             menu.displayChallengeMenu();
@@ -130,7 +130,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public void quotesEnglish(){
         List<Quotes> quotes = quotesEnglishRepo.findAllByIdNotNull();
         String quote = Challenge.quoteToType(quotes);
-        double wpm = Challenge.startChallenge(quote);
+        double wpm = Challenge.startChallenge(quote, sc, currentUser);
         currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
@@ -138,7 +138,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public void wordsEnglish25(){
         List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
         String words = Challenge.wordsToType(wordsList);
-        double wpm = Challenge.startChallenge(words);
+        double wpm = Challenge.startChallenge(words, sc, currentUser);
         currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
@@ -146,7 +146,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public void quotesSwedish(){
         List<Quotes> quotes = quotesSwedishRepo.findAllByIdNotNull();
         String quote = Challenge.quoteToType(quotes);
-        double wpm = Challenge.startChallenge(quote);
+        double wpm = Challenge.startChallenge(quote, sc, currentUser);
         currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
@@ -154,14 +154,14 @@ public class TypeSpeederApplication implements CommandLineRunner {
     public void wordsSwedish25(){
         List<Words> wordsList = wordsSwedishRepo.findAllByIdNotNull();
         String words = Challenge.wordsToType(wordsList);
-        double wpm = Challenge.startChallenge(words);
+        double wpm = Challenge.startChallenge(words, sc, currentUser);
         currentUser.getAccountStatistics().updateHighestWpm(wpm);
         currentUser.getLevel().tryLevelUp();
         accountRepo.save(currentUser);
     }
     public void letters(){
         List<Words> wordsList = wordsEnglishRepo.findAllByIdNotNull();
-
+        //TODO
     }
     public void manageAccount(){
         boolean loop = true;
@@ -177,6 +177,21 @@ public class TypeSpeederApplication implements CommandLineRunner {
                 default -> System.out.println("\nPlease enter a number between 0-3");
             }
 
+        }while (loop);
+    }
+    public void setting(){
+        boolean loop = true;
+        do{
+            menu.displaySettingsMenu();
+            int menuChoice = validator.validateInt();
+
+            switch(menuChoice){
+                case 1 -> menu.changeLanguage();
+                case 2 -> {}
+                case 3 -> {}
+                case 0 -> loop = false;
+                default -> System.out.println("\nPlease enter a number between 0-3");
+            }
         }while (loop);
     }
 }
