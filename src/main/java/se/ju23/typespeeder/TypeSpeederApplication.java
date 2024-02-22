@@ -106,7 +106,9 @@ public class TypeSpeederApplication implements CommandLineRunner {
         }while (loop);
     }
     public void combinedLeaderboard(){
-        //TODO
+        List<Account> accountList = accountRepo.findAll();
+        List<Account> sortedList = CombinedLeaderboard.sortLeaderboard(accountList);
+        CombinedLeaderboard.printLeaderboard(sortedList);
     }
     public void challenge(){ //TODO add more challenges.
         boolean loop = true;

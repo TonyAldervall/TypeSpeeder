@@ -25,6 +25,7 @@ public class HighestWpmLeaderboard {
 
     @Override
     public String toString() {
-        return "Level: " + level + " " + playerName + "#" + id + ": " + highestWpm + " WPM";
+        return "Level " + level + " " + playerName + "#" + id + "\n"
+                + "WPM: " + highestWpm ;
     }
 }

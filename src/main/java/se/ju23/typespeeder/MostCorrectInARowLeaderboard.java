@@ -25,6 +25,7 @@ public class MostCorrectInARowLeaderboard {
 
     @Override
     public String toString() {
-        return "Level: " + level + " " + playerName + "#" + id + ": " + mostCorrectInARow + " Correct in a row.";
+        return "Level " + level + " " + playerName + "#" + id + "\n"
+                + "Most Correct In A Row: " + mostCorrectInARow ;
     }
 }

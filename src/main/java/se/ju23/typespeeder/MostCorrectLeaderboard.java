@@ -25,6 +25,7 @@ public class MostCorrectLeaderboard {
 
     @Override
     public String toString() {
-        return "Level: " + level + " " + playerName + "#" + id + ": " + correct + " Correct";
+        return "Level " + level + " " + playerName + "#" + id + "\n"
+                + "Correct: " + correct ;
     }
 }
