@@ -36,12 +36,21 @@ public class PatchTest {
 
             assertTrue(realeaseDateTime.getType().equals(LocalDateTime.class), "Field 'realeaseDateTime' should be of type LocalDateTime.");
 
-            Object instance = someClass.getDeclaredConstructor().newInstance();
-            LocalDateTime dateTimeValue = (LocalDateTime) realeaseDateTime.get(instance);
+            //Creating test instance with test parameters.
+            String patch = "Test";
+            LocalDateTime localDateTime = LocalDateTime.now();
+            Object instance = Class.forName("Patch").getDeclaredConstructor(String.class, LocalDateTime.class).newInstance(patch, localDateTime);
 
+            //Expected Time Format
+            LocalDateTime dateTimeValue = (LocalDateTime) realeaseDateTime.get(instance);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = dateTimeValue.format(formatter);
-            assertEquals("Expected format", formattedDateTime, "'realeaseDateTime' field should have format 'yyyy-MM-dd HH:mm:ss'.");
+
+            //Fetching my instance time using method in class.
+            Method realeaseDateTimeGetter = someClass.getMethod("getRealeaseDateTime");
+            String myTime = (String) realeaseDateTimeGetter.invoke(instance);
+
+            assertEquals(formattedDateTime, myTime, "'realeaseDateTime' field should have format 'yyyy-MM-dd HH:mm:ss'.");
 
             Method getterMethod = someClass.getDeclaredMethod("getRealeaseDateTime");
             assertNotNull(getterMethod, "Getter method for field 'realeaseDateTime' should exist.");

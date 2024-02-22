@@ -1,5 +1,6 @@
 package se.ju23.typespeeder;
 
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -31,7 +32,10 @@ public class NewsLetterTest {
 
             assertTrue(contentField.getType().equals(String.class), "Field 'content' should be of type String.");
 
-            Object instance = newsLetterClass.getDeclaredConstructor().newInstance();
+            String content = "This is a test newsletter to see if this will be long enough to pass the test in the NewsLetterTest class. I hope this is long enough" +
+                    " please how much more of this.";
+            LocalDateTime localDateTime = LocalDateTime.now();
+            Object instance = newsLetterClass.getDeclaredConstructor(String.class, LocalDateTime.class).newInstance(content, localDateTime);
             Field field = newsLetterClass.getDeclaredField("content");
             field.setAccessible(true);
             String contentValue = (String) field.get(instance);
@@ -54,12 +58,22 @@ public class NewsLetterTest {
 
             assertTrue(publishDateTime.getType().equals(LocalDateTime.class), "Field 'publishDateTime' should be of type LocalDateTime.");
 
-            Object instance = someClass.getDeclaredConstructor().newInstance();
-            LocalDateTime dateTimeValue = (LocalDateTime) publishDateTime.get(instance);
+            //Creating test instance with test parameters.
+            String content = "This is a test newsletter to see if this will be long enough to pass the test in the NewsLetterTest class. I hope this is long enough" +
+                    " please how much more of this.";
+            LocalDateTime localDateTime = LocalDateTime.now();
+            Object instance = someClass.getDeclaredConstructor(String.class, LocalDateTime.class).newInstance(content, localDateTime);
 
+            //Expected Time Format
+            LocalDateTime dateTimeValue = (LocalDateTime) publishDateTime.get(instance);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = dateTimeValue.format(formatter);
-            assertEquals(formattedDateTime, "'publishDateTime' field should have format 'yyyy-MM-dd HH:mm:ss'.");
+
+            //Fetching my instance time using method in class.
+            Method publishDateTimeGetter = someClass.getMethod("getPublishDateTime");
+            String myTime = (String) publishDateTimeGetter.invoke(instance);
+
+            assertEquals(formattedDateTime, myTime ,"'publishDateTime' field should have format 'yyyy-MM-dd HH:mm:ss'.");
 
             Method getterMethod = someClass.getDeclaredMethod("getPublishDateTime");
             assertNotNull(getterMethod, "Getter method for the field 'publishDateTime' should exist.");
