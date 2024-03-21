@@ -1,6 +1,5 @@
 # TypeSpeeder
-
-The warnings are written in english and make sure that you read the warnings carefully.
+TypeSpeeder project for school, not really happy with this one but i'll leave it as public anyway.
 
 ## Update 1 of 3
 One file is now added to the project:
